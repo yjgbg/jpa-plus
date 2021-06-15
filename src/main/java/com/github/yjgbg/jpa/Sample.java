@@ -1,5 +1,7 @@
 package com.github.yjgbg.jpa;
 
+import com.github.yjgbg.jpa.core.EntityG;
+import com.github.yjgbg.jpa.core.Sort;
 import com.github.yjgbg.jpa.core.Spec;
 import com.github.yjgbg.jpa.ext.LbkExtJpaPlusCore;
 import lombok.experimental.ExtensionMethod;
@@ -14,13 +16,15 @@ public class Sample {
 	}
 
 	public static void test(EntityManager em) {
-		final var a = em.select(Sample.class).findOne();
+		final var a = em.select(Sample.class).spec(spec -> Spec.values("id",List.of(1))).findOne();
 		final var exist = !em.select(Sample.class)
 				.spec(spec -> Spec.and(spec,Spec.values("id", List.of(1,2,3))))
 				.spec(spec -> Spec.and(spec,Spec.like("username","alice%")))
 				.findAll(0,1).isEmpty();
 		final var count = em.select(Sample.class)
 				.spec(spec -> Spec.and(spec,Spec.like("username","alice%")))
+				.entityG(__ -> EntityG.of("subSet"))
+				.sort(sort -> Sort.and(sort,Sort.asc("alice")))
 				.count();
 	}
 }

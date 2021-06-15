@@ -25,7 +25,8 @@ public class EntityManagers {
 	 * @param <A> 目标类型
 	 * @return
 	 */
-	public static <A> List<A> findAll(EntityManager em, Class<A> clazz, Spec<A> spec, EntityG<A> entityG, Sort<A> sort, int page, int pageSize) {
+	public static <A> List<A>
+	findAll(EntityManager em, Class<A> clazz, Spec<A> spec, EntityG<A> entityG, Sort<A> sort, int page, int pageSize) {
 		final var query = typedQuery(em, clazz, spec,entityG,sort);
 		return page < 0 ? query.getResultList()
 				: query.setFirstResult(page * pageSize).setMaxResults(page).getResultList();
@@ -35,7 +36,8 @@ public class EntityManagers {
 		return typedQuery(em, clazz, spec,null,null).getMaxResults();
 	}
 
-	private static <A> TypedQuery<A> typedQuery(EntityManager em, Class<A> clazz, Spec<A> spec,EntityG<A> entityG,Sort<A> sort) {
+	private static <A> TypedQuery<A>
+	typedQuery(EntityManager em, Class<A> clazz, Spec<A> spec,EntityG<A> entityG,Sort<A> sort) {
 		final var cb = em.getCriteriaBuilder();
 		final var cq = cb.createQuery(clazz);
 		final var root = cq.from(clazz);
